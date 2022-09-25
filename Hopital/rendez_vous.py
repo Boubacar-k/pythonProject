@@ -1,6 +1,121 @@
-from tkinter import *
 from subprocess import call
+from tkinter import *
 from tkinter import messagebox
+from tkinter import ttk
+
+import mysql.connector
+
+
+def Valider():
+
+    Nomcomplet =labelTitre.get();
+    DatedeNaissance = labelTitre.get();
+    Téléphone = labelTitre.get();
+    Adresse= labelTitre.get();
+    Date= labelTitre.get();
+    Heure=labelTitre.get();
+    Traitant=labelTitre.get();
+
+    con= mysql.connect('hopital')
+    curser.execute("Inserer dans RDV('Nom complet','Date de naissance','Telephone','Adresse','Date','Heure','Traitant') values(?,?,?,?,?,?,?)")
+    con.commit()
+    con.close()
+    messagebox.showinfo("RDV inseré")
+
+
+    con = mysql.connect('hopital.db')
+    curser= con.cursor()
+    select= curser.execute("select *from RDV order by Nom complet desc")
+    select= list(select)
+    table.insert('',END,values=select[0])
+    con.close()
+
+def Modifier():
+        Nomcomplet = labelTitre.get();
+        DatedeNaissance = labelTitre.get();
+        Téléphone = labelTitre.get();
+        Adresse = labelTitre.get();
+        Date = labelTitre.get();
+        Heure = labelTitre.get();
+        Traitant = labelTitre.get();
+
+        con = mysql.connect('hopital.db')
+        curser.execute(
+            "Modifier RDV set Nom complet=?, Date de naissance=?,Téléphone=?, Adresse=?,Date=?,Heure=?,Traitant=? where Nom complet=?",
+            [Nomcomplet, Datedenaissance, Téléphone, Adresse, Date, Heure, Traitant])
+        con.commit()
+        con.close()
+        messagebox.showinfo("RDV modifié")
+
+        con = mysql.connect('hopital.db')
+        curser = con.cursor()
+        select = curser.execute("select *from RDV order by Nom complet desc")
+        select = list(select)
+        table.insert('', END, values=select[0])
+        con.close()
+
+def Supprimer():
+            codeSelectionner= table.item(table.selection())['values'][0]
+            con = mysql.connect('hopital.db')
+            curser = con.cursor()
+            delete = curser.execute("delete from RDV where Nom complet={}".format(codeSelectionner))
+            con.commit()
+            table.delete(table.selection())
+
+
+def Rechercher():
+    Nomcomplet = labelTitre.get();
+    DatedeNaissance = labelTitre.get();
+    Téléphone = labelTitre.get();
+    Adresse = labelTitre.get();
+    Date = labelTitre.get();
+    Heure = labelTitre.get();
+    Traitant = labelTitre.get();
+
+    con = mysql.connect('hopital.db')
+    curser = con.cursor()
+    select = curser.execute("select *from RDV order by Nom complet desc")
+    select = list(select)
+    table.insert('', END, values=select[0])
+    con.commit()
+    con.close()
+
+
+table= ttk.Treeview(colums= (1,2,3,4,5,6,7), height=5, show="headings")
+table.place(x=400,y=60,width=880,height=30)
+
+
+table.heading(1, text="Nom complet")
+table.heading(2, text="Date de naissance")
+table.heading(3, text="Téléphone")
+table.heading(4, text="Adresse")
+table.heading(5, text="Date")
+table.heading(6, text="Heure")
+table.heading(7, text="Traitant")
+
+
+table.column(1, width = 50)
+table.column(2, width = 150)
+table.column(3, width = 150)
+table.column(4, width = 50)
+table.column(5, width = 150)
+table.column(6, width = 100)
+table.column(7, width = 150)
+
+
+
+con= mysql.connect('hopital.db')
+curser = con.cursor()
+select = curser.execute("select * from RDV")
+for row in select:
+    table.insert('',END, value= row)
+con.close()
+
+
+
+
+
+
 
 def deconnection():
     mbox = messagebox.askquestion("Deconnecter","Voulez-vous vraiment vous deconnecter?")
@@ -84,5 +199,66 @@ btnRdv.place(x=10,y=360,width=180)
 
 btnDeconnecter=Button(dash,text="Se deconnecter",font=("Arial",12),bg="#3D88F9",fg="white",borderwidth=0,command=deconnection)
 btnDeconnecter.place(x=10,y=440,width=180)
+
+
+labelTitre = Label(text = "Nom complet")
+labelTitre.place(x=200,y=90)
+
+
+labelTitre = Entry()
+labelTitre.place(x=303,y=93)
+
+labelTitre= Label(text = "Date de Naissance")
+labelTitre.place(x=200,y=120)
+
+labelTitre = Entry()
+labelTitre.place(x=304,y=120)
+
+labelTitre= Label(text = "Téléphone")
+labelTitre.place(x=200,y=150)
+
+labelTitre = Entry()
+labelTitre.place(x=304,y=150)
+
+
+
+labelTitre= Label(text = "Adresse")
+labelTitre.place(x=700,y=90)
+
+labelTitre = Entry()
+labelTitre.place(x=755,y=93)
+
+labelTitre= Label(text = "Date")
+labelTitre.place(x=700,y=120)
+
+labelTitre = Entry()
+labelTitre.place(x=755,y=120)
+
+labelTitre= Label(text = "Heure")
+labelTitre.place(x=700,y=155)
+
+labelTitre = Entry()
+labelTitre.place(x=755,y=155)
+
+labelTitre= Label(text = "Traitant")
+labelTitre.place(x=700,y=190)
+
+labelTitre = Entry()
+labelTitre.place(x=755,y=190)
+
+btnRdv=Button(text="Valider",font=("Arial",12),bg="#1D314F",fg="white",borderwidth=0,command=Rdv)
+btnRdv.place(x=230,y=300,width=180)
+
+btnRdv=Button(text="Modifier",font=("Arial",12),bg="#1D314F",fg="white",borderwidth=0,command=Rdv)
+btnRdv.place(x=420,y=300,width=180)
+
+btnRdv=Button(text="Supprimer",font=("Arial",12),bg="#1D314F",fg="white",borderwidth=0,command=Rdv)
+btnRdv.place(x=610,y=300,width=180)
+
+btnRdv=Button(text="Rechercher",font=("Arial",12),bg="#1D314F",fg="white",borderwidth=0,command=Rdv)
+btnRdv.place(x=800,y=300,width=180)
+
+
+
 
 fenetre.mainloop()
