@@ -1,9 +1,11 @@
-from subprocess import call
 from tkinter import *
-from tkinter import messagebox
 from tkinter import ttk
-
+from subprocess import call
+from tkinter import messagebox
 import mysql.connector
+
+
+
 
 
 def Valider():
@@ -62,25 +64,6 @@ def Supprimer():
             con.commit()
             table.delete(table.selection())
 
-
-def Rechercher():
-    Nomcomplet = labelTitre.get();
-    DatedeNaissance = labelTitre.get();
-    Téléphone = labelTitre.get();
-    Adresse = labelTitre.get();
-    Date = labelTitre.get();
-    Heure = labelTitre.get();
-    Traitant = labelTitre.get();
-
-    con = mysql.connect('hopital.db')
-    curser = con.cursor()
-    select = curser.execute("select *from RDV order by Nom complet desc")
-    select = list(select)
-    table.insert('', END, values=select[0])
-    con.commit()
-    con.close()
-
-
 table= ttk.Treeview(colums= (1,2,3,4,5,6,7), height=5, show="headings")
 table.place(x=400,y=60,width=880,height=30)
 
@@ -110,6 +93,8 @@ select = curser.execute("select * from RDV")
 for row in select:
     table.insert('',END, value= row)
 con.close()
+
+
 
 
 
@@ -168,9 +153,16 @@ labelTitre = Label(fenetre,borderwidth=0,relief=SUNKEN,font=("Arial Bold",10),
                    background="#1D314F",foreground="#000000")
 labelTitre.place(x=0,y=60,width=200,height=30)
 
-labelTitre = Label(fenetre,borderwidth=0,relief=SUNKEN,text="BIENVENUE SUR LA PAGE RENDEZ-VOUS",font=("Sans Serif bold",20),
+labelTitre = Label(fenetre,borderwidth=0,relief=SUNKEN,text="Insertion des RENDEZ-VOUS",font=("Sans Serif bold",20),
                    background="#7DA0D6",foreground="#000000")
 labelTitre.place(x=200,y=60,width=880,height=30)
+
+
+
+
+labelTitre = Label(fenetre,borderwidth=0,relief=SUNKEN,text="Liste des RENDEZ-VOUS",font=("Sans Serif bold",20),
+                   background="#7DA0D6",foreground="#000000")
+labelTitre.place(x=200,y=350,width=880,height=30)
 
 #pied de page
 labelTitre = Label(fenetre,borderwidth=0,relief=SUNKEN,text="Copyright:tout droit reservé",font=("Arial Bold",10),
@@ -199,7 +191,6 @@ btnRdv.place(x=10,y=360,width=180)
 
 btnDeconnecter=Button(dash,text="Se deconnecter",font=("Arial",12),bg="#3D88F9",fg="white",borderwidth=0,command=deconnection)
 btnDeconnecter.place(x=10,y=440,width=180)
-
 
 labelTitre = Label(text = "Nom complet")
 labelTitre.place(x=200,y=90)
@@ -257,6 +248,26 @@ btnRdv.place(x=610,y=300,width=180)
 
 btnRdv=Button(text="Rechercher",font=("Arial",12),bg="#1D314F",fg="white",borderwidth=0,command=Rdv)
 btnRdv.place(x=800,y=300,width=180)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
