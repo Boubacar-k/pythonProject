@@ -1,84 +1,117 @@
-from subprocess import call
 from tkinter import *
-from tkinter import messagebox
 from tkinter import ttk
-import mysql.connector
+from subprocess import call
+from tkinter import messagebox
+import mysql.connector as Mysql
+from tkinter.ttk import Treeview
 
+def rechercher():
+    if(txtID_rdv.get() == ""):
+        messagebox.showinfo("Recherche ", "Veuillez entrer l'ID du rdv à chercher")
+    else:
+        con = Mysql.connect(host="localhost", user="root", password="root", database="hopital")
+        cursor = con.cursor()
+        cursor.execute("SELECT * FROM rdv WHERE id_rdv ='"+ txtID_Patient.get() +"'")
+        rows = cursor.fetchall()
 
-def Valider():
+        for row in rows:
+            txtNom.insert(0, row[1])
+            txtDate_naissance.insert(0, row[2])
+            txtTelephone.insert(0, row[3])
+            txtAdresse.insert(0, row[4])
+            txtDate_rdv.insert(0, row[5])
+            txtHeure_rdv.insert(0, row[6])
+            txtHeure_rdv.insert(0, row[7])
+        con.close();
+def modifier():
+    id_rdv = txtID_rdv.get()
+    nom = txtNom.get()
+    date_naissance = txtDate_naissance.get()
+    telephone = txtTelephone.get()
+    adresse = txtAdresse.get()
+    date_rdv = txtDate_rdv.get()
+    traitant = txtTraitant.get()
 
-    Nomcomplet =labelTitre.get();
-    DatedeNaissance = labelTitre.get();
-    Téléphone = labelTitre.get();
-    Adresse= labelTitre.get();
-    Date= labelTitre.get();
-    Heure=labelTitre.get();
-    Traitant=labelTitre.get();
+    if (id_rdv=="" or nom == "" or Date_naissance == "" or adresse == "" or telephone == "" or date_rdv== "" or heure_rdv== "" or traitant=="" ):
+        messagebox.showinfo("Erreur:", "Aucun champ ne doit etre vide")
+    else:
+        con = Mysql.connect(host="localhost", user="root", password="root", database="hopital")
+        cursor = con.cursor()
+        cursor.execute("update rdv set nom ='"+ nom+"',date_naissance='"+ date_naissance +"',telephone='"+ telephone+"',adresse='"+ adresse +"',date_rdv='"+ date_rdv +"',heure_rdv='"+ heure_rdv +"',traitant='"+ traitant+"', WHERE id_rdv='"+ id_rdv+"'")
+        cursor.execute("commit");
 
-    con= mysql.connector.connect(host="localhost", user="root", password="", database='hopital')
-    curser.execute("Inserer dans RDV('Nom complet','Date de naissance','Telephone','Adresse','Date','Heure','Traitant') values(?,?,?,?,?,?,?)")
-    con.commit()
-    con.close()
-    messagebox.showinfo("RDV inseré")
+        txtID_rdv.delete(0, 'end')
+        txtNom.delete(0, 'end')
+        txtDate_naissanceDate.delete(0, 'end')
+        txtTelephone.delete(0, 'end')
+        txtAdresse.delete(0, 'end')
+        txtDate_rdv.delete(0, 'end')
+        txtHeure_rdv.delete(0, 'end')
+        txtTraitant.delete(0, 'end')
+        messagebox.showinfo("Modification ", "Modifier avec succès")
+        afficher()
+        con.close();
+def valider():
+    id_rdv = txtID_rdv.get()
+    nom  = txtNom.get()
+    date_naissance = txtDate_naissance.get()
+    telephone = txtTelephone.get()
+    adresse = txtAdresse.get()
+    date_rdv = txtDate_rdv.get()
+    heure_rdv = txtHeure_rdv.get()
+    traitant = txtTraitant.get()
 
+    if (id_rdv == "" or nom == "" or date_naissance == "" or adresse == "" or telephone == "" or date_rdv == "" or heure_rdv == "" or traitant == ""):
+        messagebox.showinfo("Erreur:", "Aucun champ ne doit etre vide")
+    else:
+        con = Mysql.connect(host="localhost", user="root", password="root", database="hopital")
+        cursor = con.cursor()
+        cursor.execute( "INSERT INTO rdv VALUES ('" + id_rdv + "','" + nom + "','" + Date_naissance + "','" + telephone + "','" + adress + "','" + date_rdv + "','" + heure_rdv +  "','"  + traitant + "')")
+        cursor.execute("commit")
 
-    con = mysql.connector.connect(host="localhost", user="root", password="", database='hopital')
-    curser= con.cursor()
-    select= curser.execute("select *from RDV order by Nom complet desc")
-    select= list(select)
-    table.insert('',END,values=select[0])
-    con.close()
+        txtID_rdv.delete(0, 'end')
+        txtNom .delete(0, 'end')
+        txtDate_naissance.delete(0, 'end')
+        txtTelephone.delete(0, 'end')
+        txtAdresse.delete(0, 'end')
+        txtDate_rdv.delete(0, 'end')
+        txtHeure_rdv.delete(0, 'end')
+        txtTraitant.delete(0, 'end')
+        messagebox.showinfo("rdv ajouter ", "Inserer avec succès")
+#afficher
+        afficher()
+        con.close();
+def supprimer():
+    if(txtID_rdv.get() == ""):
+        messagebox.showinfo("Suppression ", "Spécifier l'ID du rdv à supprimer")
+    else:
+        con = Mysql.connect(host="localhost", user="root", password="root", database="hopital")
+        cursor = con.cursor()
+        cursor.execute("DELETE FROM rdv WHERE id_rdv ='"+ txtID_rdv.get() +"'")
+        cursor.execute("commit")
 
-def Modifier():
-        Nomcomplet = labelTitre.get();
-        DatedeNaissance = labelTitre.get();
-        Téléphone = labelTitre.get();
-        Adresse = labelTitre.get();
-        Date = labelTitre.get();
-        Heure = labelTitre.get();
-        Traitant = labelTitre.get();
+        txtID_rdv.delete(0, 'end')
+        txtNom.delete(0, 'end')
+        txtDate_naissance.delete(0, 'end')
+        txtTelephone.delete(0, 'end')
+        txtAdresse.delete(0, 'end')
+        txtDate_rdv.delete(0, 'end')
+        txtHeure_rdv.delete(0, 'end')
+        txtTraitant.delete(0, 'end')
+        messagebox.showinfo("Suppression ", "Supprimer avec succès")
+        afficher()
+        con.close();
+def afficher():
+    con = Mysql.connect(host="localhost", user="root", password="root", database="hopital")
+    cursor = con.cursor()
+    cursor.execute("SELECT * FROM rdv")
+    table.delete(*table.get_children())
+    records = cursor.fetchall()
+    print(records)
 
-        con = mysql.connector.connect(host="localhost", user="root", password="", database='hopital')
-        curser.execute(
-            "Modifier RDV set Nom complet=?, Date de naissance=?,Téléphone=?, Adresse=?,Date=?,Heure=?,Traitant=? where Nom complet=?",
-            [Nomcomplet, Datedenaissance, Téléphone, Adresse, Date, Heure, Traitant])
-        con.commit()
+    for i, (id_rdv,nom,Date_naissance,telephone,adress,Date_rdv,Heure_rdv,traitant) in enumerate(records, start=1):
+        table.insert("", "end", values=(id_rdv,nom,Date_naissance,telephone,adress,Date_rdv,Heure_rdv,traitant))
         con.close()
-        messagebox.showinfo("RDV modifié")
-
-        con = mysql.connector.connect(host="localhost", user="root", password="", database='hopital')
-        curser = con.cursor()
-        select = curser.execute("select *from RDV order by Nom complet desc")
-        select = list(select)
-        table.insert('', END, values=select[0])
-        con.close()
-
-def Supprimer():
-            codeSelectionner= table.item(table.selection())['values'][0]
-            con = mysql.connector.connect('hopital.db')
-            curser = con.cursor()
-            delete = curser.execute("delete from RDV where Nom complet={}".format(codeSelectionner))
-            con.commit()
-            table.delete(table.selection())
-
-
-def Rechercher():
-    Nomcomplet = labelTitre.get();
-    DatedeNaissance = labelTitre.get();
-    Téléphone = labelTitre.get();
-    Adresse = labelTitre.get();
-    Date = labelTitre.get();
-    Heure = labelTitre.get();
-    Traitant = labelTitre.get();
-
-    con = mysql.connector.connect(host="localhost", user="root", password="", database='hopital')
-    curser = con.cursor()
-    select = curser.execute("select *from RDV order by Nom complet desc")
-    select = list(select)
-    table.insert('', END, values=select[0])
-    con.commit()
-    con.close()
-
 
 def deconnection():
     mbox = messagebox.askquestion("Deconnecter","Voulez-vous vraiment vous deconnecter?")
@@ -113,6 +146,7 @@ def Comptabilite():
 def Rdv():
     fenetre.destroy()
     call(["python", "rendez_vous.py"])
+
 fenetre = Tk()
 
 
@@ -121,6 +155,8 @@ fenetre.geometry("1080x600+100+20")
 fenetre.title("Accueil")
 fenetre.resizable(False,False)
 fenetre.configure(background="#FFFFFF")
+
+
 
 #titre
 labelTitre = Label(fenetre,borderwidth=0,relief=SUNKEN,text="I KA DOCTOROSO",font=("Sans Serif bold",26),
@@ -131,10 +167,119 @@ labelTitre = Label(fenetre,borderwidth=0,relief=SUNKEN,font=("Arial Bold",10),
                    background="#1D314F",foreground="#000000")
 labelTitre.place(x=0,y=60,width=200,height=30)
 
-labelTitre = Label(fenetre,borderwidth=0,relief=SUNKEN,text="BIENVENUE SUR LA PAGE RENDEZ-VOUS",font=("Sans Serif bold",20),
+labelTitre = Label(fenetre,borderwidth=0,relief=SUNKEN,text="BIENVENUE SUR LA PAGE RDV",font=("Sans Serif bold",20),
                    background="#7DA0D6",foreground="#000000")
 labelTitre.place(x=200,y=60,width=880,height=30)
 
+#pied de page
+labelTitre = Label(fenetre,borderwidth=0,relief=SUNKEN,text="Copyright:tout droit reservé",font=("Arial Bold",10),
+                   background="#1D314F",foreground="#000000")
+labelTitre.place(x=0,y=570,width=1080,height=30)
+
+#ID
+
+lblID_rdv=Label(fenetre,text="ID_rdv :",font=("Times New Roman",14),
+                   bg="#FFFFFF",foreground="#000000")
+lblID_rdv.place(x=216,y=100,width=150)
+txtID_rdv = Entry(fenetre,bd=2,font=("Times New Roman",12))
+txtID_rdv.place(x=400,y=100,width=180)
+#NOM
+
+lblNom =Label(fenetre,text="Nom Complet :",font=("Times New Roman",14),
+                   bg="#FFFFFF",foreground="#000000")
+lblNom.place(x=216,y=140,width=150)
+txtNom = Entry(fenetre,bd=2,font=("Times New Roman",12))
+txtNom.place(x=400,y=140,width=180)
+
+#Date_naisance
+
+lblDate_naissance =Label(fenetre,text="Date_naissance :",font=("Times New Roman",14),
+                   bg="#FFFFFF",foreground="#000000")
+lblDate_naissance.place(x=216,y=180,width=180)
+txtDate_naissance = Entry(fenetre,bd=2,font=("Times New Roman",12))
+txtDate_naissance.place(x=400,y=180,width=180)
+
+#Telephone
+
+lblTelephone =Label(fenetre,text="Telephone :",font=("Times New Roman",14),
+                   bg="#FFFFFF",foreground="#000000")
+lblTelephone.place(x=216,y=220,width=180)
+txtTelephone = Entry(fenetre,bd=2,font=("Times New Roman",12))
+txtTelephone.place(x=400,y=220,width=180)
+#Adresse
+
+lblAdresse =Label(fenetre,text="Adresse :",font=("Times New Roman",14),
+                   bg="#FFFFFF",foreground="#000000")
+lblAdresse.place(x=600,y=100,width=180)
+txtAdresse = Entry(fenetre,bd=2,font=("Times New Roman",12))
+txtAdresse.place(x=800,y=100,width=180)
+#Date_rdv
+
+lblDate_rdv =Label(fenetre,text="Date_rdv :",font=("Times New Roman",14),
+                   bg="#FFFFFF",foreground="#000000")
+lblDate_rdv.place(x=600,y=140,width=180)
+txtDate_rdv = Entry(fenetre,bd=2,font=("Times New Roman",12))
+txtDate_rdv.place(x=800,y=140,width=180)
+
+#Heure_rdv
+lblHeure_rdv =Label(fenetre,text="Heure_rdv :",font=("Times New Roman",14),
+                   bg="#FFFFFF",foreground="#000000")
+lblHeure_rdv.place(x=600,y=175,width=180)
+txtHeure_rdv = Entry(fenetre,bd=2,font=("Times New Roman",12))
+txtHeure_rdv.place(x=800,y=175,width=180)
+
+#Traitant
+
+lblTraitant =Label(fenetre,text="Traitant :",font=("Times New Roman",14),
+                   bg="#FFFFFF",foreground="#000000")
+lblTraitant.place(x=600,y=220,width=180)
+txtTraitant = Entry(fenetre,bd=2,font=("Times New Roman",12))
+txtTraitant.place(x=800,y=220,width=180)
+
+#BOUTON Valider
+btnValider=Button(fenetre,text="Valider",font=("Arial",14),bg="#1D314F",fg="white",borderwidth=0,command=valider)
+btnValider.place(x=250,y=260,width=180)
+#BOUTON MODIFIER
+btnModifier=Button(fenetre,text="Modifier",font=("Arial",14),bg="#1D314F",fg="white",borderwidth=0,command=modifier)
+btnModifier.place(x=450,y=260,width=180)
+#BOUTON SUPPRIMER
+btnSupprimer=Button(fenetre,text="Supprimer",font=("Arial",14),bg="#1D314F",fg="white",borderwidth=0,command=supprimer)
+btnSupprimer.place(x=650,y=260,width=180)
+#BOUTON RECHERCHER
+btnRechercher=Button(fenetre,text="Rechercher",font=("Arial",14),bg="#1D314F",fg="white",borderwidth=0,command=rechercher)
+btnRechercher.place(x=850,y=260,width=180)
+#LISTE DES RDV
+labelTitre = Label(fenetre,borderwidth=0,relief=SUNKEN,text="LISTE DES RDV",font=("Sans Serif bold",20),
+                   background="#7DA0D6",foreground="#000000")
+labelTitre.place(x=200,y=320,width=880,height=30)
+
+#Tableau
+table = ttk.Treeview(fenetre, columns = (1, 2, 3,4,5,6,7,8), height = 2, show = "headings")
+table.place(x = 202,y = 353, width = 875, height = 215)
+#Entete
+table.heading(1 , text = "ID_rdv")
+table.heading(2 , text = "Nom Complet")
+table.heading(3 , text = "Date_naissance")
+table.heading(4 , text = "Telephone")
+table.heading(5 , text = "Adresse")
+table.heading(6 , text = "Date_rdv")
+table.heading(7 , text = "Heure_rdv")
+table.heading(8 , text = "Traitant")
+#definir les dimentions des colonnes
+table.column(1,width = 10)
+table.column(2,width = 100)
+table.column(3,width = 20)
+table.column(4,width = 10)
+table.column(5,width = 60)
+table.column(6,width = 70)
+table.column(7,width = 50)
+table.column(8,width = 60)
+con = Mysql.connect(host="localhost", user="root", password="root", database="hopital")
+cursor = con.cursor()
+cursor.execute("select * from rdv ")
+for row in cursor:
+    table.insert('', END, value = row)
+con.close()
 #pied de page
 labelTitre = Label(fenetre,borderwidth=0,relief=SUNKEN,text="Copyright:tout droit reservé",font=("Arial Bold",10),
                    background="#1D314F",foreground="#000000")
@@ -157,110 +302,11 @@ btnOrdonnance=Button(dash,text="Ordonnance",font=("Arial",12),bg="#1D314F",fg="w
 btnOrdonnance.place(x=10,y=260,width=180)
 btnComptabilite=Button(dash,text="Comptabilité",font=("Arial",12),bg="#1D314F",fg="white",borderwidth=0,command=Comptabilite)
 btnComptabilite.place(x=10,y=310,width=180)
-btnRdv=Button(dash,text="Rendez-vous",font=("Arial",12),bg="#1D314F",fg="white",borderwidth=0,command=Rdv)
+btnRdv=Button(dash,text="Rendez-vous",font=("Arial",12),bg="#0052CC",fg="white",borderwidth=0,command=Rdv)
 btnRdv.place(x=10,y=360,width=180)
 
 btnDeconnecter=Button(dash,text="Se deconnecter",font=("Arial",12),bg="#3D88F9",fg="white",borderwidth=0,command=deconnection)
 btnDeconnecter.place(x=10,y=440,width=180)
-
-
-labelTitre = Label(text = "Nom complet")
-labelTitre.place(x=200,y=90)
-
-
-labelTitre = Entry()
-labelTitre.place(x=303,y=93)
-
-labelTitre= Label(text = "Date de Naissance")
-labelTitre.place(x=200,y=120)
-
-labelTitre = Entry()
-labelTitre.place(x=304,y=120)
-
-labelTitre= Label(text = "Téléphone")
-labelTitre.place(x=200,y=150)
-
-labelTitre = Entry()
-labelTitre.place(x=304,y=150)
-
-
-
-labelTitre= Label(text = "Adresse")
-labelTitre.place(x=700,y=90)
-
-labelTitre = Entry()
-labelTitre.place(x=755,y=93)
-
-labelTitre= Label(text = "Date")
-labelTitre.place(x=700,y=120)
-
-labelTitre = Entry()
-labelTitre.place(x=755,y=120)
-
-labelTitre= Label(text = "Heure")
-labelTitre.place(x=700,y=155)
-
-labelTitre = Entry()
-labelTitre.place(x=755,y=155)
-
-labelTitre= Label(text = "Traitant")
-labelTitre.place(x=700,y=190)
-
-labelTitre = Entry()
-labelTitre.place(x=755,y=190)
-
-btnRdv=Button(text="Valider",font=("Arial",12),bg="#1D314F",fg="white",borderwidth=0,command=Rdv)
-btnRdv.place(x=230,y=300,width=180)
-
-btnRdv=Button(text="Modifier",font=("Arial",12),bg="#1D314F",fg="white",borderwidth=0,command=Rdv)
-btnRdv.place(x=420,y=300,width=180)
-
-btnRdv=Button(text="Supprimer",font=("Arial",12),bg="#1D314F",fg="white",borderwidth=0,command=Rdv)
-btnRdv.place(x=610,y=300,width=180)
-
-btnRdv=Button(text="Rechercher",font=("Arial",12),bg="#1D314F",fg="white",borderwidth=0,command=Rdv)
-btnRdv.place(x=800,y=300,width=180)
-
-#Titre tableau
-labelTitre = Label(fenetre,borderwidth=0,relief=SUNKEN,text="LISTE DES RENDEZ-VOUS",font=("Sans Serif bold",20),
-                   background="#7DA0D6",foreground="#000000")
-labelTitre.place(x=200,y=340,width=880,height=30)
-
-table = ttk.Treeview(fenetre,columns=(1,2,3,4,5,6,7),height=7,show="headings",)
-table.place(x=200,y=370,width=880,height=200)
-
-style = ttk.Style(fenetre)
-style.theme_use("clam")
-style.configure("Treeview.Heading", background="#D9D9D9", foreground="black")
-
-
-table.heading(1, text="Nom complet")
-table.heading(2, text="Date de naissance")
-table.heading(3, text="Téléphone")
-table.heading(4, text="Adresse")
-table.heading(5, text="Date")
-table.heading(6, text="Heure")
-table.heading(7, text="Traitant")
-
-
-table.column(1, width = 50)
-table.column(2, width = 150)
-table.column(3, width = 150)
-table.column(4, width = 50)
-table.column(5, width = 150)
-table.column(6, width = 100)
-table.column(7, width = 150)
-
-
-
-con= mysql.connector.connect(host="localhost", user="root", password="", database='hopital')
-curser = con.cursor()
-select = curser.execute("select * from rdv")
-for row in select or []:
-    table.insert('',END, value= row)
-con.close()
-
-
 
 
 fenetre.mainloop()
