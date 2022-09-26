@@ -177,7 +177,7 @@ table.configure(xscrollcommand=verscrlbar.set)
 
 con= mysql.connector.connect(host="localhost", user="root", password="", database='hopital')
 curser = con.cursor()
-curser.execute("select d.num_dep,s.numero,s.nombre_lit,sum(numero),sum(nombre_lit) from departement d,salle s where d.num_dep = s.num_dep group by d.num_dep,s.numero,s.nombre_lit")
+curser.execute("select d.num_dep,s.numero,s.nombre_lit,sum(numero),sum(nombre_lit) from departement d,salle s where d.num_dep=1 and d.num_dep = s.num_dep group by d.num_dep,s.numero,s.nombre_lit")
 for row in curser:
     table.insert('',END, value= row)
 con.close()

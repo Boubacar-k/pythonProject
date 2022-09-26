@@ -24,6 +24,14 @@ def valider():
     elif (mot_de_passe != confimer):
         messagebox.showinfo("Information", "Votre mot de passe est different de celui de la confirmation")
     else:
+        sql = "INSERT INTO personnel(id,nom,numero) VALUES (%s,%s,%s) "
+        valeur = (id, nom, num)
+        maBase = mysql.connector.connect(host="localhost", user="root", password="", database="hopital")
+        mConnect = maBase.cursor()
+        mConnect.execute(sql, valeur)
+        maBase.commit()
+        dernier = mConnect.lastrowid
+        messagebox.showinfo("Information", "insertion effectuer")
         messagebox.showinfo("Information", "Inscrit avec succès")
         fenetre.destroy()
         call(["python","connectPage.py"])
