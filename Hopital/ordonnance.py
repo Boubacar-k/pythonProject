@@ -1,6 +1,9 @@
 from tkinter import *
 from subprocess import call
-from tkinter import messagebox
+from tkinter import messagebox, ttk
+
+from tkcalendar import DateEntry
+
 
 def deconnection():
     mbox = messagebox.askquestion("Deconnecter","Voulez-vous vraiment vous deconnecter?")
@@ -62,9 +65,120 @@ labelTitre = Label(fenetre,borderwidth=0,relief=SUNKEN,text="Copyright:tout droi
                    background="#1D314F",foreground="#000000")
 labelTitre.place(x=0,y=570,width=1080,height=30)
 
+# Information Patient
+
+labelname = Label(fenetre, text=" Information Patient" ,font=('time new rooman bold',13), background="#7DA0D6")
+labelname.place(x=260, y=95 )
+
+labelname = Label(fenetre, text=" Nom et Prenom :" ,font=('time new rooman',12))
+labelname.place(x=250, y=130 )
+
+# Entrez le nom du Patient
+entryname= Entry(fenetre, bg="#D9D9D9")
+entryname.place(x=400, y=130, width=180)
+
+# ID Patient
+labelname = Label(fenetre, text=" ID_Patient :",font=('time new rooman',12))
+labelname.place(x=250, y=160 )
+
+# Entrez l'ID du Patient
+entryid= Entry(fenetre, bg="#D9D9D9")
+entryid.place(x=400, y=160, width=180)
+
+# ID Ordonance
+labelname = Label(fenetre, text=" ID_Ordonance :",font=('time new rooman',12))
+labelname.place(x=250, y=190 )
+
+# Entrez l'ID de l'ordonance
+entryid_ordo= Entry(fenetre, bg="#D9D9D9")
+entryid_ordo.place(x=400, y=190, width=180)
+# Titre date de prescription
+labelname = Label(fenetre, text="Date de Prescription :" ,font=('time new rooman',10))
+labelname.place(x=250, y=220 )
+
+# Entrez la date de payement de la personne
+entrydatepayement= DateEntry(fenetre, bg="#D9D9D9", date_pattern="dd/mm/yy")
+entrydatepayement.place(x=400, y= 220,width=180)
+
+# Information Medecin
+
+labelname = Label(fenetre, text=" Information Medecin Traitant" ,font=('time new rooman bold',13), background="#7DA0D6")
+labelname.place(x=630, y=95 )
+
+labelname = Label(fenetre, text=" Nom et Prenom :" ,font=('time new rooman',12))
+labelname.place(x=630, y=130 )
+
+# Entrez le nom du Medecin
+entryname_medecin= Entry(fenetre, bg="#D9D9D9")
+entryname_medecin.place(x=759, y=130, width=180)
+
+# ID Medecin
+labelname = Label(fenetre, text=" ID_Medecin :",font=('time new rooman',12))
+labelname.place(x=630, y=160 )
+
+# Entrez l'ID du Medecin
+entryid_medecin= Entry(fenetre, bg="#D9D9D9")
+entryid_medecin.place(x=759, y=160, width=180)
+
+# Prescription liste
+
+
+#Boutton ajouter
+btnajouter= Button(fenetre, text="Enregistrer", background="#0052CC", font=('time new rooman',15))
+btnajouter.place(x=390, y=260)
+
+#Boutton Modifier
+btnmodifier= Button(fenetre, text="Modifier", background="#0052CC", font=('time new rooman',15))
+btnmodifier.place(x=540, y=260)
+
+#Boutton Supprimer
+btnsuprimer= Button(fenetre, text="Supprimer", background="#0052CC", font=('time new rooman',15))
+btnsuprimer.place(x=670, y=260)
+
+#Boutton Rechercher
+btnrechercher= Button(fenetre, text="Rechercher", fg="black", background="#0052CC", font=('time new rooman',15))
+btnrechercher.place(x=810, y=260)
+
+'''#Liste des ordonnance
+labelliste = Label(fenetre,text="La liste des Ordonnances",font=("Sans Serif bold",15),
+                   background="#7DA0D6",foreground="#000000")
+labelliste.place(x=200,y=450,width=880,height=23)'''
+
+# Titre Ordonnance
+labelname = Label(fenetre, text=" Prescription:" ,font=('time new rooman bold',13), background="#7DA0D6")
+labelname.place(x=260, y=320 )
+
+text = Text(fenetre,font=("times new roman",13) ,height= 11,bg="#D9D9D9")
+
+text.place(x=230, y=350, width=260)
+#Liste des ordonnance
+labelname = Label(fenetre, text=" Liste des Ordonnance" ,font=('time new rooman bold',13), background="#7DA0D6")
+labelname.place(x=630, y=320 )
 #FRAME
 dash = Frame(fenetre,background="#4062DD")
 dash.place(x=0,y=90,width=200,height=480)
+
+#Treeview de la liste des ordonnance
+tree= ttk.Treeview(fenetre, columns = (1,2,3,4,5), height = 9, show = "headings")
+style = ttk.Style(fenetre)
+style.theme_use("clam")
+style.configure("Treeview.Heading", background="#D9D9D9", foreground="black")
+tree.place(x=500, y=349)
+tree.heading(1, text= "ID_Patient")
+tree.heading(2, text= "ID_ordonnance")
+tree.heading(3, text= "ID_Medecin")
+tree.heading(4, text= "Date")
+tree.heading(5, text= "Prescription")
+tree.column(1, width= 90)
+tree.column(2, width= 90)
+tree.column(3, width= 90)
+tree.column(4, width= 90)
+tree.column(5, width= 200)
+# Bare de défilement du tree vew
+verscrlbar = ttk.Scrollbar(fenetre,
+                           orient="vertical",
+                           command=tree.yview)
+verscrlbar.place(x=1062,y=410,height=120)
 
 #BOUTONS
 btnAccueil=Button(dash,text="Accueil",font=("Arial",12),bg="#1D314F",fg="white",borderwidth=0,command=Accueil)
