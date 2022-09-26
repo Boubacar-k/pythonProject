@@ -2,7 +2,6 @@ from subprocess import call
 from tkinter import *
 from tkinter import messagebox
 from tkinter import ttk
-
 import mysql.connector
 
 
@@ -16,14 +15,14 @@ def Valider():
     Heure=labelTitre.get();
     Traitant=labelTitre.get();
 
-    con= mysql.connect('hopital')
+    con= mysql.connector.connect(host="localhost", user="root", password="", database='hopital')
     curser.execute("Inserer dans RDV('Nom complet','Date de naissance','Telephone','Adresse','Date','Heure','Traitant') values(?,?,?,?,?,?,?)")
     con.commit()
     con.close()
     messagebox.showinfo("RDV inseré")
 
 
-    con = mysql.connect('hopital.db')
+    con = mysql.connector.connect(host="localhost", user="root", password="", database='hopital')
     curser= con.cursor()
     select= curser.execute("select *from RDV order by Nom complet desc")
     select= list(select)
@@ -39,7 +38,7 @@ def Modifier():
         Heure = labelTitre.get();
         Traitant = labelTitre.get();
 
-        con = mysql.connect('hopital.db')
+        con = mysql.connector.connect(host="localhost", user="root", password="", database='hopital')
         curser.execute(
             "Modifier RDV set Nom complet=?, Date de naissance=?,Téléphone=?, Adresse=?,Date=?,Heure=?,Traitant=? where Nom complet=?",
             [Nomcomplet, Datedenaissance, Téléphone, Adresse, Date, Heure, Traitant])
@@ -47,7 +46,7 @@ def Modifier():
         con.close()
         messagebox.showinfo("RDV modifié")
 
-        con = mysql.connect('hopital.db')
+        con = mysql.connector.connect(host="localhost", user="root", password="", database='hopital')
         curser = con.cursor()
         select = curser.execute("select *from RDV order by Nom complet desc")
         select = list(select)
@@ -56,7 +55,7 @@ def Modifier():
 
 def Supprimer():
             codeSelectionner= table.item(table.selection())['values'][0]
-            con = mysql.connect('hopital.db')
+            con = mysql.connector.connect('hopital.db')
             curser = con.cursor()
             delete = curser.execute("delete from RDV where Nom complet={}".format(codeSelectionner))
             con.commit()
@@ -72,49 +71,13 @@ def Rechercher():
     Heure = labelTitre.get();
     Traitant = labelTitre.get();
 
-    con = mysql.connect('hopital.db')
+    con = mysql.connector.connect(host="localhost", user="root", password="", database='hopital')
     curser = con.cursor()
     select = curser.execute("select *from RDV order by Nom complet desc")
     select = list(select)
     table.insert('', END, values=select[0])
     con.commit()
     con.close()
-
-
-table= ttk.Treeview(colums= (1,2,3,4,5,6,7), height=5, show="headings")
-table.place(x=400,y=60,width=880,height=30)
-
-
-table.heading(1, text="Nom complet")
-table.heading(2, text="Date de naissance")
-table.heading(3, text="Téléphone")
-table.heading(4, text="Adresse")
-table.heading(5, text="Date")
-table.heading(6, text="Heure")
-table.heading(7, text="Traitant")
-
-
-table.column(1, width = 50)
-table.column(2, width = 150)
-table.column(3, width = 150)
-table.column(4, width = 50)
-table.column(5, width = 150)
-table.column(6, width = 100)
-table.column(7, width = 150)
-
-
-
-con= mysql.connect('hopital.db')
-curser = con.cursor()
-select = curser.execute("select * from RDV")
-for row in select:
-    table.insert('',END, value= row)
-con.close()
-
-
-
-
-
 
 
 def deconnection():
@@ -257,6 +220,45 @@ btnRdv.place(x=610,y=300,width=180)
 
 btnRdv=Button(text="Rechercher",font=("Arial",12),bg="#1D314F",fg="white",borderwidth=0,command=Rdv)
 btnRdv.place(x=800,y=300,width=180)
+
+#Titre tableau
+labelTitre = Label(fenetre,borderwidth=0,relief=SUNKEN,text="LISTE DES RENDEZ-VOUS",font=("Sans Serif bold",20),
+                   background="#7DA0D6",foreground="#000000")
+labelTitre.place(x=200,y=340,width=880,height=30)
+
+table = ttk.Treeview(fenetre,columns=(1,2,3,4,5,6,7),height=7,show="headings",)
+table.place(x=200,y=370,width=880,height=200)
+
+style = ttk.Style(fenetre)
+style.theme_use("clam")
+style.configure("Treeview.Heading", background="#D9D9D9", foreground="black")
+
+
+table.heading(1, text="Nom complet")
+table.heading(2, text="Date de naissance")
+table.heading(3, text="Téléphone")
+table.heading(4, text="Adresse")
+table.heading(5, text="Date")
+table.heading(6, text="Heure")
+table.heading(7, text="Traitant")
+
+
+table.column(1, width = 50)
+table.column(2, width = 150)
+table.column(3, width = 150)
+table.column(4, width = 50)
+table.column(5, width = 150)
+table.column(6, width = 100)
+table.column(7, width = 150)
+
+
+
+con= mysql.connector.connect(host="localhost", user="root", password="", database='hopital')
+curser = con.cursor()
+select = curser.execute("select * from rdv")
+for row in select or []:
+    table.insert('',END, value= row)
+con.close()
 
 
 

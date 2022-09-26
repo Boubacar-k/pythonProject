@@ -1,6 +1,8 @@
 from tkinter import *
 from subprocess import call
 from tkinter import messagebox
+from tkinter import ttk
+import mysql.connector
 
 def deconnection():
     mbox = messagebox.askquestion("Deconnecter","Voulez-vous vraiment vous deconnecter?")
@@ -37,6 +39,47 @@ def Rdv():
     call(["python", "rendez_vous.py"])
 fenetre = Tk()
 
+def Urgence():
+    con = mysql.connector.connect(host="localhost", user="root", password="", database='hopital')
+    curser = con.cursor()
+    curser.execute("select d.num_dep,s.numero,s.nombre_lit,sum(numero),sum(nombre_lit) from departement d,salle s where d.num_dep = 1 and d.num_dep = s.num_dep group by d.num_dep,s.numero,s.nombre_lit")
+    fenetre.destroy()
+    call(["python", "depatement.py"])
+
+def Odontolologie():
+    con = mysql.connector.connect(host="localhost", user="root", password="", database='hopital')
+    curser = con.cursor()
+    curser.execute("select d.num_dep,s.numero,s.nombre_lit,sum(numero),sum(nombre_lit) from departement d,salle s where d.num_dep = 2 and d.num_dep = s.num_dep group by d.num_dep,s.numero,s.nombre_lit")
+    fenetre.destroy()
+    call(["python", "depatement.py"])
+
+def Traumatologie():
+    con = mysql.connector.connect(host="localhost", user="root", password="", database='hopital')
+    curser = con.cursor()
+    curser.execute("select d.num_dep,s.numero,s.nombre_lit,sum(numero),sum(nombre_lit) from departement d,salle s where d.num_dep =3 and d.num_dep = s.num_dep group by d.num_dep,s.numero,s.nombre_lit")
+    fenetre.destroy()
+    call(["python", "depatement.py"])
+
+def Chirurgie():
+    con = mysql.connector.connect(host="localhost", user="root", password="", database='hopital')
+    curser = con.cursor()
+    curser.execute("select d.num_dep,s.numero,s.nombre_lit,sum(numero),sum(nombre_lit) from departement d,salle s where d.num_dep =4 and d.num_dep = s.num_dep group by d.num_dep,s.numero,s.nombre_lit")
+    fenetre.destroy()
+    call(["python", "depatement.py"])
+
+def Gynecologie():
+    con = mysql.connector.connect(host="localhost", user="root", password="", database='hopital')
+    curser = con.cursor()
+    curser.execute("select d.num_dep,s.numero,s.nombre_lit,sum(numero),sum(nombre_lit) from departement d,salle s where d.num_dep =5 and d.num_dep = s.num_dep group by d.num_dep,s.numero,s.nombre_lit")
+    fenetre.destroy()
+    call(["python", "depatement.py"])
+
+def Pediatrie():
+    con = mysql.connector.connect(host="localhost", user="root", password="", database='hopital')
+    curser = con.cursor()
+    curser.execute("select d.num_dep,s.numero,s.nombre_lit,sum(numero),sum(nombre_lit) from departement d,salle s where d.num_dep =6 and d.num_dep = s.num_dep group by d.num_dep,s.numero,s.nombre_lit")
+    fenetre.destroy()
+    call(["python", "depatement.py"])
 
 #parametre:
 fenetre.geometry("1080x600+100+20")
@@ -84,5 +127,59 @@ btnRdv.place(x=10,y=360,width=180)
 
 btnDeconnecter=Button(dash,text="Se deconnecter",font=("Arial",12),bg="#3D88F9",fg="white",borderwidth=0,command=deconnection)
 btnDeconnecter.place(x=10,y=440,width=180)
+
+btnUrgence=Button(fenetre,text="URGENCE",font=("Arial",12),bg="#4062DD",fg="black",borderwidth=0,command=Urgence)
+btnUrgence.place(x=300,y=140,width=180,height=50)
+
+btnOdonto=Button(fenetre,text="ODONTOLOGIE",font=("Arial",12),bg="#4062DD",fg="black",borderwidth=0,command=Odontolologie)
+btnOdonto.place(x=550,y=140,width=180,height=50)
+
+btnTrauma=Button(fenetre,text="TRAUMATOLOGIE",font=("Arial",12),bg="#4062DD",fg="black",borderwidth=0,command=Traumatologie)
+btnTrauma.place(x=800,y=140,width=180,height=50)
+
+btnChirurgie=Button(fenetre,text="CHIRURGIE",font=("Arial",12),bg="#4062DD",fg="black",borderwidth=0,command=Chirurgie)
+btnChirurgie.place(x=300,y=240,width=180,height=50)
+
+btnGynecologie=Button(fenetre,text="GYNECOLOGIE",font=("Arial",12),bg="#4062DD",fg="black",borderwidth=0,command=Gynecologie)
+btnGynecologie.place(x=550,y=240,width=180,height=50)
+
+btnPediatrie=Button(fenetre,text="PEDIATRIE",font=("Arial",12),bg="#4062DD",fg="black",borderwidth=0,command=Pediatrie)
+btnPediatrie.place(x=800,y=240,width=180,height=50)
+#Titre tableau
+labelTitre = Label(fenetre,borderwidth=0,relief=SUNKEN,text="LISTE DES SALLES",font=("Sans Serif bold",20),
+                   background="#7DA0D6",foreground="#000000")
+labelTitre.place(x=200,y=300,width=880,height=30)
+
+
+
+#Table
+table = ttk.Treeview(fenetre,columns=(1,2,3,4,5),height=5,show="headings",)
+table.place(x=200,y=330,width=880,height=240)
+
+style = ttk.Style(fenetre)
+style.theme_use("clam")
+style.configure("Treeview.Heading", background="#D9D9D9", foreground="black")
+
+#Entete
+table.heading(1,text="ID",)
+table.heading(2,text="NUMERO SALLE")
+table.heading(3,text="NUMERO LIT")
+table.heading(4,text="NOMBRE SALLE")
+table.heading(5,text="NOMBRE LIT")
+table.column(1,width=50)
+
+verscrlbar = ttk.Scrollbar(fenetre,
+                           orient="vertical",
+                           command=table.yview)
+verscrlbar.place(x=1068,y=357,height=213)
+
+table.configure(xscrollcommand=verscrlbar.set)
+
+con= mysql.connector.connect(host="localhost", user="root", password="", database='hopital')
+curser = con.cursor()
+curser.execute("select d.num_dep,s.numero,s.nombre_lit,sum(numero),sum(nombre_lit) from departement d,salle s where d.num_dep = s.num_dep group by d.num_dep,s.numero,s.nombre_lit")
+for row in curser:
+    table.insert('',END, value= row)
+con.close()
 
 fenetre.mainloop()
