@@ -116,7 +116,7 @@ btnAccueil=customtkinter.CTkButton(master=dash,text="Accueil",text_font=("Arial"
 btnAccueil.place(x=10,y=60,width=180)
 btnPersonnel=customtkinter.CTkButton(master=dash,text="Personnel",text_font=("Arial",14),bg_color="#4062DD",fg_color="#1D314F",hover=True,hover_color="#0052CC",border_width=0,corner_radius=10,command=Personnel)
 btnPersonnel.place(x=10,y=110,width=180)
-btnDepartement=customtkinter.CTkButton(master=dash,text="Département",text_font=("Arial",14),bg_color="#4062DD",fg_color="#1D314F",hover=True,hover_color="#0052CC",border_width=0,corner_radius=10,command=Depatement)
+btnDepartement=customtkinter.CTkButton(master=dash,text="Département",text_font=("Arial",14),bg_color="#4062DD",fg_color="#0052CC",hover=True,hover_color="#0052CC",border_width=0,corner_radius=10,command=Depatement)
 btnDepartement.place(x=10,y=160,width=180)
 btnPatient=customtkinter.CTkButton(master=dash,text="Patient",text_font=("Arial",14),bg_color="#4062DD",fg_color="#1D314F",hover=True,hover_color="#0052CC",border_width=0,corner_radius=10,command=Patient)
 btnPatient.place(x=10,y=210,width=180)

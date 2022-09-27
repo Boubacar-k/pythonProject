@@ -1,7 +1,7 @@
 from tkinter import *
 from subprocess import call
 from tkinter import messagebox, ttk
-
+import customtkinter
 from tkcalendar import DateEntry
 
 
@@ -194,22 +194,22 @@ dash = Frame(fenetre,background="#4062DD")
 dash.place(x=0,y=90,width=200,height=480)
 
 #BOUTONS
-btnAccueil=Button(dash,text="Accueil",font=("Arial",12),bg="#1D314F",fg="white",borderwidth=0,command=Accueil)
+btnAccueil=customtkinter.CTkButton(master=dash,text="Accueil",text_font=("Arial",14),bg_color="#4062DD",fg_color="#1D314F",hover=True,hover_color="#0052CC",border_width=0,corner_radius=10,command=Accueil)
 btnAccueil.place(x=10,y=60,width=180)
-btnPersonnel=Button(dash,text="Personnel",font=("Arial",12),bg="#1D314F",fg="white",borderwidth=0,command=Personnel)
+btnPersonnel=customtkinter.CTkButton(master=dash,text="Personnel",text_font=("Arial",14),bg_color="#4062DD",fg_color="#0052CC",hover=True,hover_color="#0052CC",border_width=0,corner_radius=10,command=Personnel)
 btnPersonnel.place(x=10,y=110,width=180)
-btnDepartement=Button(dash,text="Departement",font=("Arial",12),bg="#1D314F",fg="white",borderwidth=0,command=Depatement)
+btnDepartement=customtkinter.CTkButton(master=dash,text="Département",text_font=("Arial",14),bg_color="#4062DD",fg_color="#1D314F",hover=True,hover_color="#0052CC",border_width=0,corner_radius=10,command=Depatement)
 btnDepartement.place(x=10,y=160,width=180)
-btnPatient=Button(dash,text="Patient",font=("Arial",12),bg="#1D314F",fg="white",borderwidth=0,command=Patient)
+btnPatient=customtkinter.CTkButton(master=dash,text="Patient",text_font=("Arial",14),bg_color="#4062DD",fg_color="#1D314F",hover=True,hover_color="#0052CC",border_width=0,corner_radius=10,command=Patient)
 btnPatient.place(x=10,y=210,width=180)
-btnOrdonnance=Button(dash,text="Ordonnance",font=("Arial",12),bg="#1D314F",fg="white",borderwidth=0,command=Ordonnance)
+btnOrdonnance=customtkinter.CTkButton(master=dash,text="Ordonnance",text_font=("Arial",14),bg_color="#4062DD",fg_color="#1D314F",hover=True,hover_color="#0052CC",border_width=0,corner_radius=10,command=Ordonnance)
 btnOrdonnance.place(x=10,y=260,width=180)
-btnComptabilite=Button(dash,text="Comptabilité",font=("Arial",12),bg="#1D314F",fg="white",borderwidth=0,command=Comptabilite)
+btnComptabilite=customtkinter.CTkButton(master=dash,text="Comptabilité",text_font=("Arial",14),bg_color="#4062DD",fg_color="#1D314F",hover=True,hover_color="#0052CC",border_width=0,corner_radius=10,command=Comptabilite)
 btnComptabilite.place(x=10,y=310,width=180)
-btnRdv=Button(dash,text="Rendez-vous",font=("Arial",12),bg="#1D314F",fg="white",borderwidth=0,command=Rdv)
+btnRdv=customtkinter.CTkButton(master=dash,text="Rendez-vous",text_font=("Arial",14),bg_color="#4062DD",fg_color="#1D314F",hover=True,hover_color="#0052CC",border_width=0,corner_radius=10,command=Rdv)
 btnRdv.place(x=10,y=360,width=180)
 
-btnDeconnecter=Button(dash,text="Se deconnecter",font=("Arial",12),bg="#3D88F9",fg="white",borderwidth=0,command=deconnection)
+btnDeconnecter=customtkinter.CTkButton(master=dash,text="Deconnecter",text_font=("Arial",14),bg_color="#4062DD",fg_color="#3D88F9",hover=True,hover_color="#0052CC",border_width=0,corner_radius=10,command=Rdv)
 btnDeconnecter.place(x=10,y=440,width=180)
 
 fenetre.mainloop()
