@@ -123,12 +123,11 @@ btnOrdonnance=customtkinter.CTkButton(master=dash,text="Ordonnance",text_font=("
 btnOrdonnance.place(x=10,y=260,width=180)
 btnComptabilite=customtkinter.CTkButton(master=dash,text="Comptabilité",text_font=("Arial",14),text_color="white",bg_color="#4062DD",fg_color="#1D314F",hover=True,hover_color="#0052CC",border_width=0,corner_radius=10,command=Comptabilite)
 btnComptabilite.place(x=10,y=310,width=180)
-btnRdv=customtkinter.CTkButton(master=dash,text="Rendez-vous",text_font=("Arial",14),text_color="white",bg_color="#4062DD",fg_color="#1D314F",hover=True,hover_color="#0052CC",border_width=0,corner_radius=10,command=Rdv)
+btnRdv=customtkinter.CTkButton(master=dash,text="Rendez-vous",text_font=("Arial",14),text_color="white",bg_color="#4062DD",fg_color="#0052CC",hover=True,hover_color="#0052CC",border_width=0,corner_radius=10,command=Rdv)
 btnRdv.place(x=10,y=360,width=180)
 
 btnDeconnecter=customtkinter.CTkButton(master=dash,text="Deconnecter",text_font=("Arial",14),text_color="white",bg_color="#4062DD",fg_color="#3D88F9",hover=True,hover_color="#0052CC",border_width=0,corner_radius=10,command=deconnection)
 btnDeconnecter.place(x=10,y=440,width=180)
-
 btnUrgence=Button(fenetre,text="URGENCE",font=("Arial",12),bg="#4062DD",fg="black",borderwidth=0,command=Urgence)
 btnUrgence.place(x=300,y=140,width=180,height=50)
 
