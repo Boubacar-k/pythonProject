@@ -71,7 +71,6 @@ def valider():
         call(["python","connectPage.py"])
 #----------------------------------------------MAIN----------------------------------------------------------
 fenetre = Tk()
-
 #parametre:
 fenetre.geometry("1080x600+100+20")
 fenetre.title("Creer compte")
