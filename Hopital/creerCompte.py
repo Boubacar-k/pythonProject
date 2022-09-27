@@ -4,6 +4,7 @@ from subprocess import call
 from tkinter import messagebox
 import tkcalendar
 import mysql.connector
+import customtkinter
 
 def toggle_password():
     if txtMdp.cget('show') == '':
@@ -194,11 +195,11 @@ txtDateIns = tkcalendar.DateEntry(fenetre,bd=2,font=("Times New Roman",12),date_
 txtDateIns.place(x=800,y=300,width=180)
 
 #BOUTON VALIDER
-btnValider=Button(fenetre,text="Valider",font=("Arial",14),bg="#4062DD",fg="white",borderwidth=0,command=valider)
+btnValider=customtkinter.CTkButton(master=fenetre,text="Valider",text_font=("Arial",14),text_color="white",bg_color="white",fg_color="#4062DD",hover=True,hover_color="#4062DD",border_width=1,corner_radius=10,command=valider)
 btnValider.place(x=800,y=400,width=180)
 
 #BOUTON ANNULER
-btnAnnuler=Button(fenetre,text="Annuler",font=("Arial",14),bg="#4062DD",fg="white",borderwidth=0,command=annuler)
+btnAnnuler=customtkinter.CTkButton(master=fenetre,text="Annuler",text_font=("Arial",14),text_color="white",bg_color="white",fg_color="#4062DD",hover=True,hover_color="#4062DD",border_width=1,corner_radius=10,command=annuler)
 btnAnnuler.place(x=600,y=400,width=180)
 
 #pied de page

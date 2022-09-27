@@ -83,10 +83,10 @@ btn_afficher.place(x=975,y=280)
 
 #Bouton se connecter
 
-btnSeConnecter=customtkinter.CTkButton(master=fenetre,text="Se connecter",text_font=("Arial",14),bg_color="white",fg_color="#4062DD",hover=True,hover_color="#4062DD",border_width=1,corner_radius=10,command=seConnecter)
+btnSeConnecter=customtkinter.CTkButton(master=fenetre,text="Se connecter",text_font=("Arial",14),text_color="white",bg_color="white",fg_color="#4062DD",hover=True,hover_color="#4062DD",border_width=1,corner_radius=10,command=seConnecter)
 btnSeConnecter.place(x=840,y=350,width=170)
 #Bouton creer compte
-btnCreerCompte=customtkinter.CTkButton(master=fenetre,text="Creer un compte",text_font=("Arial",14),bg_color="white",fg_color="#4062DD",hover=True,hover_color="#4062DD",border_width=1,corner_radius=10,command=creer_compte)
+btnCreerCompte=customtkinter.CTkButton(master=fenetre,text="Creer un compte",text_font=("Arial",14),text_color="white",bg_color="white",fg_color="#4062DD",hover=True,hover_color="#4062DD",border_width=1,corner_radius=10,command=creer_compte)
 btnCreerCompte.place(x=840,y=400,width=170)
 
 
