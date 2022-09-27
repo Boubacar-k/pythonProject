@@ -2,7 +2,24 @@ from tkinter import *
 from tkinter import ttk
 from subprocess import call
 from tkinter import messagebox
+import tkcalendar
+import mysql.connector
 
+def toggle_password():
+    if txtMdp.cget('show') == '':
+        txtMdp.config(show='*')
+        btn_afficher.config(image=image2)
+    else:
+        txtMdp.config(show='')
+        btn_afficher.config(image=image)
+
+def toggle_password2():
+    if txtConfirmer.cget('show') == '':
+        txtConfirmer.config(show='*')
+        btn_afficher.config(image=image2)
+    else:
+        txtConfirmer.config(show='')
+        btn_afficher.config(image=image)
 def annuler():
     fenetre.destroy()
     call(["python","connectPage.py"])
@@ -13,26 +30,42 @@ def valider():
     dateN = txtDateN.get()
     contact = txtContact.get()
     fn = fonction.get()
+    dep = departement.current()+1
     special = Specialite.get()
     nomUtisateur = txtUtilisateur.get()
     mot_de_passe = txtMdp.get()
     confimer = txtConfirmer.get()
     dateIns = txtDateIns.get()
-    if(nom==""or sex=="" or dateN==""or contact==""or fn==""or special=="" or nomUtisateur=="" or mot_de_passe==""
+    if(nom==""or sex=="" or dateN==""or contact==""or fn=="" or nomUtisateur=="" or mot_de_passe==""
     or confimer==""or dateIns==""):
         messagebox.showinfo("Erreur:", "Aucun champ ne doit etre vide")
     elif (mot_de_passe != confimer):
         messagebox.showinfo("Information", "Votre mot de passe est different de celui de la confirmation")
+    elif (len(mot_de_passe)<8):
+        messagebox.showinfo("Information", "Votre mot de passe ne doit pas être inferieur à 8 caractère")
     else:
-        sql = "INSERT INTO personnel(id,nom,numero) VALUES (%s,%s,%s) "
-        valeur = (id, nom, num)
+        sql = "INSERT INTO personnels(num_dep,nom,sexe,date_naissance,contact,fonction,date_insertion," \
+              "specialite,nom_utilisateur,mot_de_passe,Confirmer)" \
+              " VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) "
+
+        creationTable ="DROP TABLE directeur"
+        val = "CREATE TABLE IF NOT EXISTS directeur(num_directeur INT PRIMARY KEY AUTO_INCREMENT,num_personnel INT REFERENCES personnels(num_personnel))AS SELECT num_personnel FROM personnels WHERE fonction = 'directeur'"
+        creationTable1="DROP TABLE docteur"
+        val1 ="CREATE TABLE IF NOT EXISTS docteur(num_docteur INT PRIMARY KEY AUTO_INCREMENT,num_personnel INT REFERENCES personnels(num_personnel))AS SELECT num_personnel FROM personnels WHERE fonction = 'docteur'"
+        creationTable2="DROP TABLE secretaire"
+        val3 ="CREATE TABLE IF NOT EXISTS secretaire(num_secretaire INT PRIMARY KEY AUTO_INCREMENT,num_personnel INT REFERENCES personnels(num_personnel))AS SELECT num_personnel FROM personnels WHERE fonction ='secretaire'"
+        valeur = (dep, nom, sex,dateN,contact,fn,dateIns,special,nomUtisateur,mot_de_passe,confimer)
         maBase = mysql.connector.connect(host="localhost", user="root", password="", database="hopital")
         mConnect = maBase.cursor()
         mConnect.execute(sql, valeur)
+        mConnect.execute(creationTable,)
+        mConnect.execute(val)
+        mConnect.execute(creationTable1,)
+        mConnect.execute(val1,)
+        mConnect.execute(creationTable2,)
+        mConnect.execute(val3,)
         maBase.commit()
-        dernier = mConnect.lastrowid
         messagebox.showinfo("Information", "insertion effectuer")
-        messagebox.showinfo("Information", "Inscrit avec succès")
         fenetre.destroy()
         call(["python","connectPage.py"])
 #----------------------------------------------MAIN----------------------------------------------------------
@@ -81,7 +114,7 @@ sexe.place(x=200,y=180,width=180)
 lblDateN =Label(fenetre,text="Date de naissance :",font=("Times New Roman",14),
                    bg="#FFFFFF",foreground="#000000")
 lblDateN.place(x=16,y=220,width=180)
-txtDateN = Entry(fenetre,bd=2,font=("Times New Roman",12))
+txtDateN = tkcalendar.DateEntry(fenetre,bd=2,font=("Times New Roman",12),date_pattern = "YYYY-MM-DD")
 txtDateN.place(x=200,y=220,width=180)
 
 #Contact
@@ -95,12 +128,21 @@ txtContact.place(x=200,y=260,width=180)
 #FONCTION
 liste =['directeur','docteur','secretaire']
 
-lblContact =Label(fenetre,text="Fonction :",font=("Times New Roman",14),
+lblFonction =Label(fenetre,text="Fonction :",font=("Times New Roman",14),
                    bg="#FFFFFF",foreground="#000000")
-lblContact.place(x=16,y=300,width=180)
+lblFonction.place(x=16,y=300,width=180)
 fonction = ttk.Combobox(fenetre,values=liste)
-
 fonction.place(x=200,y=300,width=180)
+
+#DEPARTEMENT
+liste =['Urgence','Odontologie','Traumatologie','Chirurgie','Gynecologie','Pediatrie']
+
+lblDepartement =Label(fenetre,text="Departement :",font=("Times New Roman",14),
+                   bg="#FFFFFF",foreground="#000000")
+lblDepartement.place(x=16,y=340,width=180)
+departement = ttk.Combobox(fenetre,values=liste)
+
+departement.place(x=200,y=340,width=180)
 
 #SPECIALITE
 
@@ -126,23 +168,29 @@ txtUtilisateur.place(x=800,y=180,width=180)
 lblMdp =Label(fenetre,text="Mot de passe :",font=("Times New Roman",14),
                    bg="#FFFFFF",foreground="#000000")
 lblMdp.place(x=600,y=220,width=180)
-txtMdp = Entry(fenetre,bd=2,font=("Times New Roman",12))
+txtMdp = Entry(fenetre,bd=2,show="*",font=("Times New Roman",12))
 txtMdp.place(x=800,y=220,width=180)
+image = PhotoImage(file="eye.png")
+image2 = PhotoImage(file="invisible.png")
+btn_afficher = Button(fenetre,image=image2, command=toggle_password)
+btn_afficher.place(x=955,y=220,height=25)
 
 #MOT DE PASSE CONFIRMATION
 
 lblConfirmer =Label(fenetre,text="Confirmer :",font=("Times New Roman",14),
                    bg="#FFFFFF",foreground="#000000")
 lblConfirmer.place(x=600,y=260,width=180)
-txtConfirmer = Entry(fenetre,bd=2,font=("Times New Roman",12))
+txtConfirmer = Entry(fenetre,bd=2,show="*",font=("Times New Roman",12))
 txtConfirmer.place(x=800,y=260,width=180)
+btn_afficher = Button(fenetre,image=image2, command=toggle_password2)
+btn_afficher.place(x=955,y=260,height=25)
 
 #Date Insertion
 
 lblDateIns =Label(fenetre,text="Date d'insertion :",font=("Times New Roman",14),
                    bg="#FFFFFF",foreground="#000000")
 lblDateIns.place(x=600,y=300,width=180)
-txtDateIns = Entry(fenetre,bd=2,font=("Times New Roman",12))
+txtDateIns = tkcalendar.DateEntry(fenetre,bd=2,font=("Times New Roman",12),date_pattern = "YYYY-MM-DD")
 txtDateIns.place(x=800,y=300,width=180)
 
 #BOUTON VALIDER

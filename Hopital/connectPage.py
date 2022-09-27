@@ -1,6 +1,8 @@
 from tkinter import *
 from subprocess import call
 from tkinter import messagebox
+import mysql.connector
+import customtkinter
 
 #Afficher le mot de passe
 def toggle_password():
@@ -20,8 +22,22 @@ def seConnecter():
     if (nomUtilisteur == "" or password == ""):
         messagebox.showinfo("Echec", "Aucun champ ne doit etre vide")
     else:
-        fenetre.destroy()
-        call(["python", "accueil.py"])
+        try:
+            sql = "SELECT * FROM personnels WHERE nom_utilisateur =%s AND mot_de_passe =%s"
+            valeur = (nomUtilisteur,password)
+            con = mysql.connector.connect(host="localhost", user="root", password="", database='hopital')
+            curser = con.cursor()
+            curser.execute(sql,valeur)
+            resultat =curser.fetchall()
+            if resultat:
+                messagebox.showinfo("INFO", "Connecter avec succès")
+                fenetre.destroy()
+                call(["python", "accueil.py"])
+            else:
+                messagebox.showinfo("Erreur", "Nom d'utilisateur ou mot de passe incorrect")
+        except:
+            messagebox.showinfo("Erreur", "Problème de connexion")
+
 #MAIN________________________________________________________________________
 #nouvelle fenetre:
 fenetre = Tk()
@@ -67,10 +83,10 @@ btn_afficher.place(x=975,y=280)
 
 #Bouton se connecter
 
-btnSeConnecter=Button(fenetre,text="Se connecter",font=("Arial",14),bg="#4062DD",fg="white",borderwidth=0,command=seConnecter)
+btnSeConnecter=customtkinter.CTkButton(master=fenetre,text="Se connecter",text_font=("Arial",14),bg_color="white",fg_color="#4062DD",hover=True,hover_color="#4062DD",border_width=1,corner_radius=10,command=seConnecter)
 btnSeConnecter.place(x=840,y=350,width=170)
 #Bouton creer compte
-btnCreerCompte=Button(fenetre,text="Creer compte",font=("Arial",14),bg="#4062DD",fg="white",borderwidth=0,command=creer_compte)
+btnCreerCompte=customtkinter.CTkButton(master=fenetre,text="Creer un compte",text_font=("Arial",14),bg_color="white",fg_color="#4062DD",hover=True,hover_color="#4062DD",border_width=1,corner_radius=10,command=creer_compte)
 btnCreerCompte.place(x=840,y=400,width=170)
 
 
