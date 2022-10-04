@@ -5,7 +5,7 @@ from tkinter import messagebox
 import tkcalendar
 import mysql.connector
 import customtkinter
-
+from PIL import ImageTk,Image
 def toggle_password():
     if txtMdp.cget('show') == '':
         txtMdp.config(show='*')
@@ -39,9 +39,9 @@ def valider():
     dateIns = txtDateIns.get()
     if(nom==""or sex=="" or dateN==""or contact==""or fn=="" or nomUtisateur=="" or mot_de_passe==""
     or confimer==""or dateIns==""):
-        messagebox.showinfo("Erreur:", "Aucun champ ne doit etre vide")
+        messagebox.showinfo("Erreur:", "Aucun champ ne doit être vide")
     elif (mot_de_passe != confimer):
-        messagebox.showinfo("Information", "Votre mot de passe est different de celui de la confirmation")
+        messagebox.showinfo("Information", "Votre mot de passe est différent de celui de la confirmation")
     elif (len(mot_de_passe)<8):
         messagebox.showinfo("Information", "Votre mot de passe ne doit pas être inferieur à 8 caractère")
     else:
@@ -49,21 +49,15 @@ def valider():
               "specialite,nom_utilisateur,mot_de_passe,Confirmer)" \
               " VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) "
 
-        creationTable ="DROP TABLE directeur"
-        val = "CREATE TABLE IF NOT EXISTS directeur(num_directeur INT PRIMARY KEY AUTO_INCREMENT,num_personnel INT REFERENCES personnels(num_personnel))AS SELECT num_personnel FROM personnels WHERE fonction = 'directeur'"
-        creationTable1="DROP TABLE docteur"
-        val1 ="CREATE TABLE IF NOT EXISTS docteur(num_docteur INT PRIMARY KEY AUTO_INCREMENT,num_personnel INT REFERENCES personnels(num_personnel))AS SELECT num_personnel FROM personnels WHERE fonction = 'docteur'"
-        creationTable2="DROP TABLE secretaire"
-        val3 ="CREATE TABLE IF NOT EXISTS secretaire(num_secretaire INT PRIMARY KEY AUTO_INCREMENT,num_personnel INT REFERENCES personnels(num_personnel))AS SELECT num_personnel FROM personnels WHERE fonction ='secretaire'"
+        val = "INSERT INTO directeur(num_personnel) SELECT num_personnel FROM personnels WHERE fonction = 'DIRECTEUR'"
+        val1 ="INSERT INTO docteur(num_personnel) SELECT num_personnel FROM personnels WHERE fonction = 'DOCTEUR'"
+        val3 ="INSERT INTO secretaire(num_personnel) SELECT num_personnel FROM personnels WHERE fonction = 'SECRETAIRE'"
         valeur = (dep, nom, sex,dateN,contact,fn,dateIns,special,nomUtisateur,mot_de_passe,confimer)
         maBase = mysql.connector.connect(host="localhost", user="root", password="", database="hopital")
         mConnect = maBase.cursor()
         mConnect.execute(sql, valeur)
-        mConnect.execute(creationTable,)
         mConnect.execute(val)
-        mConnect.execute(creationTable1,)
         mConnect.execute(val1,)
-        mConnect.execute(creationTable2,)
         mConnect.execute(val3,)
         maBase.commit()
         messagebox.showinfo("Information", "insertion effectuer")
@@ -73,7 +67,8 @@ def valider():
 fenetre = Tk()
 #parametre:
 fenetre.geometry("1080x600+100+20")
-fenetre.title("Creer compte")
+fenetre.title("Créer compte")
+fenetre.iconbitmap("logo1.ico")
 fenetre.resizable(False,False)
 fenetre.configure(background="#FFFFFF")
 
@@ -85,6 +80,10 @@ labelTitre.place(x=0,y=0,width=1080,height=60)
 labelTitre = Label(fenetre,borderwidth=0,relief=SUNKEN,font=("Arial Bold",10),
                    background="#1D314F",foreground="#000000")
 labelTitre.place(x=0,y=60,width=200,height=30)
+
+labelTitre = Label(fenetre,borderwidth=0,relief=SUNKEN,font=("Arial Bold",10),
+                   background="#4062DD",foreground="#000000")
+labelTitre.place(x=0,y=90,width=200,height=30)
 
 labelTitre = Label(fenetre,borderwidth=0,relief=SUNKEN,text="BIENVENUE SUR LA PAGE D'INSCRIPTION",font=("Sans Serif bold",20),
                    background="#7DA0D6",foreground="#000000")
@@ -105,7 +104,7 @@ content =['Homme','Femme']
 lblSexe =Label(fenetre,text="sexe :",font=("Times New Roman",14),
                    bg="#FFFFFF",foreground="#000000")
 lblSexe.place(x=16,y=180,width=180)
-sexe = ttk.Combobox(fenetre,values=content)
+sexe = ttk.Combobox(fenetre,state="readonly",values=content)
 
 sexe.place(x=200,y=180,width=180)
 
@@ -126,32 +125,32 @@ txtContact = Entry(fenetre,bd=2,font=("Times New Roman",12))
 txtContact.place(x=200,y=260,width=180)
 
 #FONCTION
-liste =['directeur','docteur','secretaire']
+liste =['DIRECTEUR','DOCTEUR','SECRETAIRE']
 
 lblFonction =Label(fenetre,text="Fonction :",font=("Times New Roman",14),
                    bg="#FFFFFF",foreground="#000000")
 lblFonction.place(x=16,y=300,width=180)
-fonction = ttk.Combobox(fenetre,values=liste)
+fonction = ttk.Combobox(fenetre,state="readonly",values=liste)
 fonction.place(x=200,y=300,width=180)
 
 #DEPARTEMENT
-liste =['Urgence','Odontologie','Traumatologie','Chirurgie','Gynecologie','Pediatrie']
+liste =['URGENCE','ODONTOLOGIE','TRAUMATOLOGIE','CHIRURGIE','GYNECOLOGIE','PEDIATRIE','AUTRE']
 
-lblDepartement =Label(fenetre,text="Departement :",font=("Times New Roman",14),
+lblDepartement =Label(fenetre,text="Département :",font=("Times New Roman",14),
                    bg="#FFFFFF",foreground="#000000")
 lblDepartement.place(x=16,y=340,width=180)
-departement = ttk.Combobox(fenetre,values=liste)
+departement = ttk.Combobox(fenetre,state="readonly",values=liste)
 
 departement.place(x=200,y=340,width=180)
 
 #SPECIALITE
 
-specialite =['Pediatre','Generaliste','Chirurgien','Pneumologue']
+specialite =['PEDIATRE','TRAUMATOLOGUE','GYNECOLOGUE','GENERALISTE','CHIRURGIEN','ODONTOLOGUE','AUTRE']
 
-lblSpecialite =Label(fenetre,text="Specialite :",font=("Times New Roman",14),
+lblSpecialite =Label(fenetre,text="Spécialité :",font=("Times New Roman",14),
                    bg="#FFFFFF",foreground="#000000")
 lblSpecialite.place(x=600,y=140,width=180)
-Specialite = ttk.Combobox(fenetre,values=specialite)
+Specialite = ttk.Combobox(fenetre,state="readonly",values=specialite)
 
 Specialite.place(x=800,y=140,width=180)
 
@@ -206,5 +205,7 @@ labelTitre = Label(fenetre,borderwidth=0,relief=SUNKEN,text="Copyright:tout droi
                    background="#1D314F",foreground="#000000")
 labelTitre.place(x=0,y=570,width=1080,height=30)
 #-----------------------------------LES WIDGETS--------------------------------------------------------------
-
+#logo
+image_a=ImageTk.PhotoImage(Image.open('LOO.png'))
+l1 = Label(fenetre, image=image_a,width=110,height=110,bg='#4062DD').place(x=40, y=0)
 fenetre.mainloop()
